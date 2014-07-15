@@ -1,0 +1,28 @@
+<%= render partial: 'spree/admin/shared/configuration_menu' %>
+
+<div data-hook="admin_handling_fee_edit_form_header">
+	<h1><%= Spree.t(:editing_handling_fee) %></h1>
+	<%= render 'spree/shared/error_messages', target: @handling_fee %>
+</div>
+
+<div data-hook="admin_handling_fee_edit_form">
+	<%= form_for [:admin, @handling_fee] do |f| %>
+		<fieldset id="calculator_fields" data-hook class="no-border-bottom">
+		  <legend align="center"><%= Spree.t(:shipping_category) %></legend>
+	      <div data-hook="admin_handling_fee_form_shipping_category">
+			  <%= f.select(:shipping_category_id, Spree::ShippingCategory.all.map { |sc| [sc.name, sc.id] }, {}, {id: 'shipping_category_id', class: 'select2 fullwidth'}) %>
+		    </div>
+		</fieldset>
+
+	    <div data-hook="admin_handling_fee_form_calculator_fields">
+	      <%= render 'spree/admin/shared/calculator_fields', f: f %>
+	    </div>
+
+	    <div data-hook="admin_handling_fee_edit_form_buttons">
+	      <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+	    </div>
+	<% end %>
+</div>
+
+
+
