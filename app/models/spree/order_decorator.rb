@@ -1,25 +1,26 @@
-Spree::Order.class_eval do
+Spree::Order.class_eval do  
+  def create_proposed_shipments
+    adjustments.shipping.delete_all
+    shipments.destroy_all
 
-  self.state_machine.after_transition to: :payment, do: :apply_handling_fee
-
-  def apply_handling_fee
-    self.clear_handling_fees
-    label = "Handling Fee"
-    self.shipments.each do |shipment|
-      shipment.shipping_method.shipping_categories.each do |shipping_category|
-        shipping_category.handling_fees.each do |handling_fee|
-          handling_fee.create_adjustment(label, self, shipment)
+    packages = Spree::Stock::Coordinator.new(self).packages
+    packages.each do |package|
+      new_shipment = package.to_shipment
+      shipments << new_shipment
+      if new_shipment.stock_location.calculator
+        amount = new_shipment.stock_location.calculator.compute(package)
+        unless amount == 0
+          new_shipment.adjustments.create!({
+            source: new_shipment.stock_location,
+            adjustable: new_shipment,
+            amount: amount,
+            order: new_shipment.order,
+            label: "Handling"
+            })
+          end
         end
       end
-    end
-  end
 
-  def clear_handling_fees
-    adjustments.handling.destroy_all
+    shipments
   end
-
-  def handling_total
-    adjustments.handling.map(&:amount).sum
-  end
-
 end

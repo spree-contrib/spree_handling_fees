@@ -1,0 +1,8 @@
+<tfoot id='shipment-total'>
+  <% order.shipment_adjustments.handling.eligible.group_by(&:label).each do |label, adjustments| %>
+    <tr class="total" data-hook='shipment-row'>
+      <td colspan="4"><%= label %></strong></td>
+      <td class="total"><span><%= Spree::Money.new(adjustments.sum(&:amount), currency: order.currency).to_html %></span></td>
+    </tr>
+  <% end %>
+</tfoot>
