@@ -6,17 +6,17 @@ describe 'Checkout', js: true do
   let!(:alabama) { create(:state, name: "Alabama", abbr: "AL", country: usa) }
   let!(:washington) { create(:state, name: "Washington", abbr: "WA", country: usa) }
 
-  let!(:handling_calculator) { Spree::Calculator::Shipping::FlexiRate.new(first_item: 1.90, additional_item: 0.40) }
-  # default calculator in the Spree factory is flat rate of $10, which is exactly what we want
+  let!(:handling_calculator) { Spree::Calculator::Shipping::FlexiRate.create! }
+  let!(:shipping_calculator) { create(:calculator) }
   let!(:shipping_method) { create(:shipping_method, tax_category_id: 1, calculator: shipping_calculator) }
-  let!(:stock_location) { create(:stock_location, country_id: stock_location_address.country.id, state_id: stock_location_address.state.id, address1: stock_location_address.address1, city: stock_location_address.city, zipcode: stock_location_address.zipcode) }
+  let!(:stock_location) { create(:stock_location, country_id: stock_location_address.country.id, state_id: stock_location_address.state.id, address1: stock_location_address.address1, city: stock_location_address.city, zipcode: stock_location_address.zipcode, calculator: handling_calculator) }
   let!(:mug) { create(:product, name: "RoR Mug", price: 10) }
   let!(:payment_method) { create(:check_payment_method) }
   let!(:zone) { create(:zone) }
   
-  let!(:handling_fee) { create(:handling_fee, name: "Handling Fee", stock_location: stock_location, calculator: handling_calculator) }
-
   before do
+    handling_calculator.set_preference(first_item: 1.90)
+    handling_calculator.set_preference(additional_item: 0.40)
     stock_location.stock_items.update_all(count_on_hand: 10)
   end
 
@@ -29,7 +29,7 @@ describe 'Checkout', js: true do
     fill_in_address(alabama_address)
     click_button "Save and Continue"
     click_button "Save and Continue"
-    page.should have_content("Handling Fee: $1.90")
+    page.should have_content("Handling $1.90")
 
     click_on "Save and Continue"
     expect(current_path).to match(spree.order_path(Spree::Order.last))
@@ -46,7 +46,7 @@ describe 'Checkout', js: true do
     fill_in_address(alabama_address)
     click_button "Save and Continue"
     click_button "Save and Continue"
-    page.should have_content("Handling Fee: $2.70")
+    page.should have_content("Handling $2.70")
 
     click_on "Save and Continue"
     expect(current_path).to match(spree.order_path(Spree::Order.last))
@@ -61,11 +61,11 @@ describe 'Checkout', js: true do
     fill_in_address(alabama_address)
     click_button "Save and Continue"
     click_button "Save and Continue"
-    page.should have_content("Handling Fee: $1.90")
+    page.should have_content("Handling $1.90")
     
     add_to_cart("RoR Mug")
     click_button "Checkout"    
-    page.should have_content("Handling Fee: $2.30")
+    page.should have_content("Handling $2.30")
   end
   
   def add_to_cart(item_name)
