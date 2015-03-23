@@ -1,6 +1,6 @@
 Spree::StockLocation.class_eval do
-  include Spree::Core::CalculatedAdjustments
-  include Spree::Core::AdjustmentSource
+  include Spree::CalculatedAdjustments
+  include Spree::AdjustmentSource
 
   def compute_amount(item)
     calculator.compute(item)
