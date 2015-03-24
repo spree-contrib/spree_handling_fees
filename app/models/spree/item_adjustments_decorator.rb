@@ -1,7 +1,7 @@
 Spree::ItemAdjustments.class_eval do
   define_callbacks :handling_adjustments
 
-  module OverrideUpdateAdjustments
+  module OverrideItemAdjustments
     def update_adjustments
       super
 
@@ -18,6 +18,6 @@ Spree::ItemAdjustments.class_eval do
     end
   end
 
-  prepend OverrideUpdateAdjustments
+  prepend OverrideItemAdjustments
 
 end

@@ -23,7 +23,7 @@ Spree::Order.class_eval do
     end
   end
 
-  module OverrideCreateProposedShipments
+  module OverrideOrder
     def create_proposed_shipments
       shipments = super
 
@@ -33,6 +33,6 @@ Spree::Order.class_eval do
     end
   end
 
-  prepend OverrideCreateProposedShipments
+  prepend OverrideOrder
 
 end
