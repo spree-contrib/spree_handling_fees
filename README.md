@@ -19,6 +19,13 @@ bundle
 bundle exec rails g spree_handling_fees:install
 ```
 
+Usage
+-------
+
+To create a handling fee, edit a Stock Location in the admin and apply a calculator. For example, you might use the Flat Rate calculator to set a flat fee of $3.99 on all shipments.
+
+If you'd like to specify only certain orders to have a handling fee, override the `needs_handling_charge?` method in your own Spree::Order decorator.
+
 Testing
 -------
 
