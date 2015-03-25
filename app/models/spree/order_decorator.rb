@@ -4,9 +4,16 @@ Spree::Order.class_eval do
     Spree::Money.new(handling_total, { currency: currency })
   end
 
+  # Override if you want to create custom situations for applying the handling charge
+  def needs_handling_charge?
+    true
+  end
+
   # Creates a adjustments representing handling charges, if applicable.
   # Following 'create_tax_charge!' convention.
   def create_handling_charge!
+    return unless needs_handling_charge?
+
     shipments.each do |shipment|
       if shipment.stock_location.calculator
         amount = shipment.stock_location.calculator.compute_shipment(shipment)
