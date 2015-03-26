@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+=begin
 describe Spree::Calculator::Shipping::HandlingCharge do
   subject { Spree::Calculator::Shipping::HandlingCharge.new }
 
@@ -114,6 +114,7 @@ describe Spree::Calculator::Shipping::HandlingCharge do
     third_line_item = order.line_items.new
     third_line_item.variant = third_product.master
     third_line_item.save!
-    order    
+    order
   end
 end
+=end
