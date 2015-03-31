@@ -28,7 +28,7 @@ Spree::ItemAdjustments.class_eval do
     included_tax_total = 0
     additional_tax_total = 0
     run_callbacks :tax_adjustments do
-      included_tax_total = adjustments.tax.included.reload.map(&:update!).compact.sum
+      included_tax_total = adjustments.tax.is_included.reload.map(&:update!).compact.sum
       additional_tax_total = adjustments.tax.additional.reload.map(&:update!).compact.sum
     end
 
