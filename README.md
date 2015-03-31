@@ -9,7 +9,7 @@ Installation
 Add spree_handling_fees to your Gemfile:
 
 ```ruby
-gem 'spree_handling_fees', github: 'mcsweeneys/spree_handling_fees'
+gem 'spree_handling_fees', github: 'spree-contrib/spree_handling_fees'
 ```
 
 Bundle your dependencies and run the installation generator:
