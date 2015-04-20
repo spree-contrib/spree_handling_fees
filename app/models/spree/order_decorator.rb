@@ -12,8 +12,6 @@ Spree::Order.class_eval do
   # Creates a adjustments representing handling charges, if applicable.
   # Following 'create_tax_charge!' convention.
   def create_handling_charge!
-    return unless needs_handling_charge?
-
     shipments.each do |shipment|
       if shipment.stock_location.calculator
         amount = shipment.stock_location.calculator.compute_shipment(shipment)
@@ -34,7 +32,7 @@ Spree::Order.class_eval do
     def create_proposed_shipments
       shipments = super
 
-      create_handling_charge!
+      create_handling_charge! if needs_handling_charge?
 
       shipments
     end
