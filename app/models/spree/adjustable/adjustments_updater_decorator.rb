@@ -11,7 +11,7 @@ Spree::Adjustable::AdjustmentsUpdater.class_eval do
         handling_total: handling_total,
         adjustment_total: adjustable.adjustment_total + handling_total,
         updated_at: Time.now
-      )
+      ) unless adjustable.destroyed?
     end
   end
 
