@@ -13,7 +13,7 @@ Spree::Order.class_eval do
   # Following 'create_tax_charge!' convention.
   def create_handling_charge!
     shipments.each do |shipment|
-      if shipment.stock_location.calculator
+      if shipment.needs_handling_charge? && shipment.stock_location.calculator
         amount = shipment.stock_location.calculator.compute_shipment(shipment)
         unless amount == 0
           shipment.adjustments.create!({
